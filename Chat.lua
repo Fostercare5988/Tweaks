@@ -8,8 +8,8 @@ local find, gsub, match, sub = string.find, string.gsub, string.match, string.su
 function FT.apply.arrowKeys() ChatFrameEditBox:SetAltArrowKeyMode(not db.arrowKeys) end
 FT.apply.arrowKeys()
 
--- Shamans blue in every class colour (C_ClassColor returns the same table,
--- ### C_ClassColor.GetClassColor). Names already drawn keep their colour.
+-- Shamans blue in every class colour (the chat frame reads RAID_CLASS_COLORS' r, g, b;
+-- C_ClassColor returns the same table, ### C_ClassColor.GetClassColor). Names already drawn keep their colour.
 local shaman = RAID_CLASS_COLORS.SHAMAN
 local stock, blue = { shaman.r, shaman.g, shaman.b, shaman.colorStr }, { 0.14, 0.35, 1, "ff2459ff" }
 function FT.apply.blueShaman()
@@ -84,26 +84,16 @@ end
 
 -- Each line --------------------------------------------------------------------
 
--- The sender's class comes from the line's GUID (### GetCurrentChatGUID()); any
--- other name from the players the client has seen (### C_PlayerCache).
-local function Colour(link, shown)
-    local name = match(link, "^[^:]+")
-    local class
-    local guid = GetCurrentChatGUID()
-    if guid then
-        local _, token, _, _, _, guidName = GetPlayerInfoByGUID(guid)
-        if guidName == name then class = token end
-    end
-    class = class or select(2, C_PlayerCache.GetPlayerInfoByName(name))
-    local color = class and C_ClassColor.GetClassColor(class)
-    if shown ~= name or not color then return "|Hplayer:" .. link .. "|h[" .. shown .. "]|h" end
-    return "[|Hplayer:" .. link .. "|h" .. color:WrapTextInColorCode(name) .. "|h]"
+-- The chat frame colours the [Name] link itself (### SetChatColorNameByClass); the
+-- client saves the choice per chat type, so it is set for every type with a sender.
+local SENDERS = { "SAY", "YELL", "EMOTE", "TEXT_EMOTE", "PARTY", "RAID", "RAID_LEADER", "RAID_WARNING",
+    "BATTLEGROUND", "BATTLEGROUND_LEADER", "GUILD", "OFFICER", "WHISPER" }
+function FT.apply.classColors()
+    for _, kind in ipairs(SENDERS) do SetChatColorNameByClass(kind, db.classColors) end
+    for i = 1, 10 do SetChatColorNameByClass("CHANNEL" .. i, db.classColors) end
 end
 
 local function Line(text)
-    if db.classColors and find(text, "|Hplayer:", 1, true) then
-        text = gsub(text, "|Hplayer:([^|]*)|h%[([^%]|]*)%]|h", Colour)
-    end
     text = Addresses(text)
     if db.timestamps then text = date("|cffcccccc[%H:%M:%S]|r ") .. text end
     return text
@@ -153,6 +143,7 @@ chat:SetScript("OnEvent", function()
         return
     end
     this:UnregisterEvent("PLAYER_ENTERING_WORLD")
+    FT.apply.classColors()
     for i = 1, NUM_CHAT_WINDOWS do
         local frame = _G["ChatFrame" .. i]
         if not CombatLog(frame) then
