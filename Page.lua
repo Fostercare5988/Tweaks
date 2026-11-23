@@ -8,7 +8,8 @@ local category
 -- In play order: a section header, then its rows. A slider is { key, name, tip, low, high }.
 local PAGE = {
     "Chat",
-    { "arrowKeys", "Arrow keys without Alt", "The arrow keys move through what you typed and repeat earlier lines." },
+    { "arrowKeys", "Arrow keys in chat", "While you type a message: Left and Right move the cursor, Up brings back "
+        .. "what you sent before (press again for older ones). Off: hold Alt for that." },
     { "history", "Chat history", "The last 30 lines of each chat window come back after a reload or login." },
     { "timestamps", "Timestamps", "The time before each chat line. Not in the combat log." },
     "Minimap",
