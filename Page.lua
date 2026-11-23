@@ -11,8 +11,6 @@ local PAGE = {
     { "arrowKeys", "Arrow keys without Alt", "The arrow keys move through what you typed and repeat earlier lines." },
     { "history", "Chat history", "The last 30 lines of each chat window come back after a reload or login." },
     { "timestamps", "Timestamps", "The time before each chat line. Not in the combat log." },
-    { "classColors", "Names in class colours", "Player names in chat in the colour of their class." },
-    { "blueShaman", "Blue shamans", "Shamans in blue everywhere a class colour is shown." },
     "Minimap",
     { "minimapScale", "Minimap size", "How large the minimap is.", 0.7, 1.6 },
     { "minimapSquare", "Square minimap", "A square minimap with a thin border." },

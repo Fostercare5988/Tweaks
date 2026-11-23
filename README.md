@@ -12,7 +12,7 @@ merchant, chat, the minimap, the world map and stances.
 - **Sell Junk** button at merchants.
 - **Chat:** arrow keys without Alt, web addresses you can copy, Shift-click a
   name into the chat box, the last 30 lines back after a reload or login,
-  timestamps, and names in class colour by the chat frame itself (shamans blue everywhere).
+  and timestamps.
 - **Minimap:** size, square shape, a 24-hour clock, the clutter buttons hidden,
   mouse-wheel zoom; Ctrl+Shift moves the map, the zone name, the clock and the
   mail, battleground and tracking icons.

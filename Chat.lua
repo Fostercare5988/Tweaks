@@ -1,5 +1,6 @@
 -- Chat: the arrow keys without Alt, web addresses as links, Shift-click names,
--- the last lines back after a reload, timestamps, names in class colours.
+-- the last lines back after a reload, timestamps. Names in class colours are
+-- ClassicAPI's (Social page); shamans are blue in the client's own colours.
 local _, FT = ...
 if not FT.apply then return end
 local db = TweaksDB
@@ -7,16 +8,6 @@ local find, gsub, match, sub = string.find, string.gsub, string.match, string.su
 
 function FT.apply.arrowKeys() ChatFrameEditBox:SetAltArrowKeyMode(not db.arrowKeys) end
 FT.apply.arrowKeys()
-
--- Shamans blue in every class colour (the chat frame reads RAID_CLASS_COLORS' r, g, b;
--- C_ClassColor returns the same table, ### C_ClassColor.GetClassColor). Names already drawn keep their colour.
-local shaman = RAID_CLASS_COLORS.SHAMAN
-local stock, blue = { shaman.r, shaman.g, shaman.b, shaman.colorStr }, { 0.14, 0.35, 1, "ff2459ff" }
-function FT.apply.blueShaman()
-    local c = db.blueShaman and blue or stock
-    shaman.r, shaman.g, shaman.b, shaman.colorStr = c[1], c[2], c[3], c[4]
-end
-FT.apply.blueShaman()
 
 -- Web addresses ---------------------------------------------------------------
 
@@ -84,15 +75,6 @@ end
 
 -- Each line --------------------------------------------------------------------
 
--- The chat frame colours the [Name] link itself (### SetChatColorNameByClass); the
--- client saves the choice per chat type, so it is set for every type with a sender.
-local SENDERS = { "SAY", "YELL", "EMOTE", "TEXT_EMOTE", "PARTY", "RAID", "RAID_LEADER", "RAID_WARNING",
-    "BATTLEGROUND", "BATTLEGROUND_LEADER", "GUILD", "OFFICER", "WHISPER" }
-function FT.apply.classColors()
-    for _, kind in ipairs(SENDERS) do SetChatColorNameByClass(kind, db.classColors) end
-    for i = 1, 10 do SetChatColorNameByClass("CHANNEL" .. i, db.classColors) end
-end
-
 local function Line(text)
     text = Addresses(text)
     if db.timestamps then text = date("|cffcccccc[%H:%M:%S]|r ") .. text end
@@ -143,7 +125,6 @@ chat:SetScript("OnEvent", function()
         return
     end
     this:UnregisterEvent("PLAYER_ENTERING_WORLD")
-    FT.apply.classColors()
     for i = 1, NUM_CHAT_WINDOWS do
         local frame = _G["ChatFrame" .. i]
         if not CombatLog(frame) then

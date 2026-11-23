@@ -8,9 +8,11 @@ local db = TweaksDB
 
 -- The page's switches and sliders. Filled in here, since the features start
 -- before the Settings window registers the page.
-FT.DEFAULTS = { arrowKeys = true, history = true, timestamps = true, classColors = true,
-    blueShaman = true, minimapSquare = true, minimapClock = true, minimapTidy = true,
+FT.DEFAULTS = { arrowKeys = true, history = true, timestamps = true, minimapSquare = true, minimapClock = true, minimapTidy = true,
     autoStance = true, minimapScale = 1.6, mapScale = 1.65 }
+-- A saved key no row or saved table owns is a retired option: it goes (KNOWN_PATTERNS KP-64).
+local TABLES = { pieces = true, chat = true }
+for key in pairs(db) do if FT.DEFAULTS[key] == nil and not TABLES[key] then db[key] = nil end end
 for key, value in pairs(FT.DEFAULTS) do if db[key] == nil then db[key] = value end end
 db.pieces = db.pieces or {} -- minimap pieces the game would put back: key = { x, y }
 
