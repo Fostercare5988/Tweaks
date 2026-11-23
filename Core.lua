@@ -49,13 +49,16 @@ local function Stop(handle)
 end
 
 -- `rule(frame)` is the game's rule for when a piece shows, asked again after.
-function FT.Movable(frame, key, label, rule)
+-- `home` is where it starts until moved: its centre against the screen's top right.
+function FT.Movable(frame, key, label, rule, home)
     frame:SetMovable(true)
     frame:SetDontSavePosition(true)
     local at = db.pieces[key]
+    frame:ClearAllPoints()
     if at then
-        frame:ClearAllPoints()
         frame:SetPoint("CENTER", UIParent, "BOTTOMLEFT", at[1], at[2])
+    else
+        frame:SetPoint("CENTER", UIParent, "TOPRIGHT", home[1], home[2])
     end
     local handle = CreateFrame("Frame", nil, frame)
     handle:SetAllPoints(frame)

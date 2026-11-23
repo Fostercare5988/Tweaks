@@ -10,7 +10,6 @@ local db = TweaksDB
 local clock = CreateFrame("Frame", "MinimapClock", Minimap)
 clock:SetSize(50, 23)
 clock:SetFrameLevel(64)
-clock:SetPoint("BOTTOM", MinimapCluster, "BOTTOM", 8, 4)
 clock:EnableMouse(true)
 local clockText = clock:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 clockText:SetAllPoints(clock)
@@ -78,11 +77,6 @@ end)
 function FT.apply.minimapTidy()
     for _, piece in ipairs(CLUTTER) do piece:SetShown(not db.minimapTidy) end
     Minimap:EnableMouseWheel(db.minimapTidy)
-    if not db.pieces.zone then -- the zone name where the top border was; -3, 83: Minimap.xml
-        MinimapZoneTextButton:ClearAllPoints()
-        MinimapZoneTextButton:SetPoint("CENTER", MinimapCluster, "CENTER", db.minimapTidy and 7 or -3,
-            db.minimapTidy and 85 or 83)
-    end
 end
 
 FT.apply.minimapScale()
@@ -92,13 +86,17 @@ FT.apply.minimapClock()
 
 -- Ctrl+Shift moves the map and each piece on its own. The mail, battleground and
 -- tracking icons show while the keys are held; then the game's rule decides.
+-- Until moved, each piece starts where the player placed it on their main
+-- (Claude, 2026-11-23), against the top right so it fits any screen.
 MinimapCluster:SetClampedToScreen(true)
-FT.Movable(MinimapCluster, "minimap", "Minimap"):SetAllPoints(Minimap) -- the handle on the map itself
-FT.Movable(MinimapZoneTextButton, "zone", "Zone")
-FT.Movable(clock, "clock", "Clock", function(frame) frame:SetShown(db.minimapClock) end)
-FT.Movable(MiniMapMailFrame, "mail", "Mail", function(frame) frame:SetShown(HasNewMail()) end)
-FT.Movable(MiniMapBattlefieldFrame, "battlefield", "BG", function() BattlefieldFrame_UpdateStatus() end)
-FT.Movable(MiniMapTrackingFrame, "tracking", "Track", function(frame) frame:SetShown(GetTrackingTexture()) end)
+FT.Movable(MinimapCluster, "minimap", "Minimap", nil, { -126, -51 }):SetAllPoints(Minimap) -- the handle on the map
+FT.Movable(MinimapZoneTextButton, "zone", "Zone", nil, { -59, -232 })
+FT.Movable(clock, "clock", "Clock", function(frame) frame:SetShown(db.minimapClock) end, { -131, -232 })
+FT.Movable(MiniMapMailFrame, "mail", "Mail", function(frame) frame:SetShown(HasNewMail()) end, { -241, -15 })
+FT.Movable(MiniMapBattlefieldFrame, "battlefield", "BG", function() BattlefieldFrame_UpdateStatus() end,
+    { -214, -241 })
+FT.Movable(MiniMapTrackingFrame, "tracking", "Track", function(frame) frame:SetShown(GetTrackingTexture()) end,
+    { -243, -44 })
 
 -- World map -------------------------------------------------------------------
 
