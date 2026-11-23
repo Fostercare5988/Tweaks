@@ -1,4 +1,4 @@
--- Chat: the arrow keys without Alt, web addresses as links, Shift-click names,
+-- Chat: the arrow keys in the chat box, web addresses as links, Shift-click names,
 -- the last lines back after a reload, timestamps. Names in class colours are
 -- ClassicAPI's (Social page); shamans are blue in the client's own colours.
 local _, FT = ...
@@ -6,8 +6,8 @@ if not FT.apply then return end
 local db = TweaksDB
 local find, gsub, match, sub = string.find, string.gsub, string.match, string.sub
 
-function FT.apply.arrowKeys() ChatFrameEditBox:SetAltArrowKeyMode(not db.arrowKeys) end
-FT.apply.arrowKeys()
+-- While typing, Left and Right move the cursor and Up and Down bring back sent lines, no Alt needed.
+ChatFrameEditBox:SetAltArrowKeyMode(false)
 
 -- Web addresses ---------------------------------------------------------------
 

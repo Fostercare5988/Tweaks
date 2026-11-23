@@ -10,7 +10,7 @@ merchant, chat, the minimap, the world map and stances.
   with what you wear.
 - **Quality borders** on character and inspect slots.
 - **Sell Junk** button at merchants.
-- **Chat:** arrow keys without Alt, web addresses you can copy, Shift-click a
+- **Chat:** arrow keys that move the cursor and bring back sent lines, web addresses you can copy, Shift-click a
   name into the chat box, the last 30 lines back after a reload or login,
   and timestamps.
 - **Minimap:** size, square shape, a 24-hour clock, the clutter buttons hidden,
